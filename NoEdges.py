@@ -45,7 +45,7 @@ if __name__ == "__main__":
     p.add_sink(sink, 10)
     q.add_sink(sink, 10)
     source.print_all_neighbors()
-
+    
     g = Graph()
     g.add_node(source)
     g.add_node(s)
