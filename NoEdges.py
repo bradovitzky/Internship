@@ -20,7 +20,6 @@ class Node(object):
         s = self._name
         return s
 
-
 class Graph(object):
     def __init__(self):
         self._nodelist = []
