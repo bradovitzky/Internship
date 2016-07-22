@@ -27,7 +27,7 @@ class Graph(object):
 
     def add_node(self, node):
         self._nodelist.append(node)
-        print('\n'.join(str(p) for p in self._nodelist))
+        print('Node "', node, '" added to nodelist')
 
 if __name__ == "__main__":
     source = Node("source", 1)
