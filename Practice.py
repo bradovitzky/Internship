@@ -25,7 +25,7 @@ class CreateGraph(object):
         edge = Edge(source, sink, capacity)
         self.edges[edge] = capacity
 
-    def make_it_flow(self, source, sink):   x
+    def make_it_flow(self, source, sink):
         for edge in self.edges: #For every edge in the graph
             if self.edges[source, sink] > sink.h: #if the source of the edge has more packets than the sink
                 if self.edges[source, sink] >= source.h: #and if the capacity of the edge is greater than the height of the source
@@ -51,4 +51,4 @@ if __name__ == "__main__":
     g.add_edge(o, p, 1)
     g.add_edge(o, sink, 3)
     g.add_edge(q, sink, 3)
-    #g.make_it_flow(source, sink)
+    g.make_it_flow(source, sink)
