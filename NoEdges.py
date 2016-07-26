@@ -35,6 +35,11 @@ class Graph(object):
         print('Node "', node, '" added to graph')
 
     def sand_pile(self):
+        '''What this code is trying to accomplish is to go through every node in a breadth first manner, checking
+        if the nodes that come after it have a smaller pile than themselves, and transferring their height if
+        necessary. A problem that I see arising here is that the checking and passing process should go in BACKWARDS
+        order so that it doesn't make a mistake with the heights, however that assumption may be wrong. Discuss this
+        code with dad ASAP.'''
         listcycle = cycle(self._nodelist)
         i = 0
         while i <= self.numEdges:
@@ -42,7 +47,7 @@ class Graph(object):
             start = next(listcycle)
             nextnode = next(listcycle)
             if nextnode not in start._sinks:
-                start = next(listcycle)
+                start = nextnode
             while nextnode in start._sinks:
                 if start._height > nextnode._height:
                     print(start._name, "height:", start._height)
