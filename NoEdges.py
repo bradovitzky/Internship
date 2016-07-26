@@ -53,8 +53,6 @@ class Graph(object):
                         nextnode._height += start._sinks[nextnode]
                         print(nextnode._height, "packets transferred to", nextnode._name, "from", start._name)
                         print("The height of", nextnode._name, "is", nextnode._height, "and the height of", start._name, "is", start._height)
-                    else:
-                        print("lolwut")
 
 
 if __name__ == "__main__":
