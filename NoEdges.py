@@ -1,4 +1,5 @@
 from itertools import cycle
+
 class Node(object):
     def __init__(self, name, height):
         self._name = name
@@ -25,6 +26,7 @@ class Node(object):
 
 class Graph(object):
     def __init__(self):
+        self.numEdges = 0
         self._nodelist = []
         self._path = []
 
@@ -35,24 +37,28 @@ class Graph(object):
     def sand_pile(self):
         listcycle = cycle(self._nodelist)
         i = 0
-        while i <= len(self._nodelist):
+        while i <= self.numEdges:
             i += 1
             start = next(listcycle)
+            print("start is", start)
             nextnode = next(listcycle)
-            if nextnode in start._sinks:
+            print('nextnode is', nextnode)
+            while nextnode in start._sinks:
                 if start._height > nextnode._height:
                     print(start._name, "height:", start._height)
                     print(nextnode._name, "height:", nextnode._height)
                     print("connection capacity:", start._sinks[nextnode])
                     if start._sinks[nextnode] >= start._height:
-                        print(nextnode._height, "packets transferred from", start._name, "to", nextnode._name)
+                        print(start._height, "packets transferred from", start._name, "to", nextnode._name)
                         start._height = 0
                         nextnode._height += start._height
                     elif start._sinks[nextnode] < start._height:
                         start._height -= start._sinks[nextnode]
                         nextnode._height += start._sinks[nextnode]
-                        print(nextnode._height, "packets transferred to", nextnode._name, "from", start._name)
+                        print(start._sinks[nextnode], "packets transferred to", nextnode._name, "from", start._name)
                         print("The height of", nextnode._name, "is", nextnode._height, "and the height of", start._name, "is", start._height)
+                nextnode = next(listcycle)
+                print("Nextnode is", nextnode)
 
 
 if __name__ == "__main__":
@@ -77,4 +83,8 @@ if __name__ == "__main__":
     g.add_node(o)
     g.add_node(p)
     g.add_node(q)
+    for node in g._nodelist:
+        for sinks in node._sinks:
+            g.numEdges += 1
+    print("There are", g.numEdges, "edges in this graphs")
     g.sand_pile()
