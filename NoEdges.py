@@ -40,9 +40,9 @@ class Graph(object):
         while i <= self.numEdges:
             i += 1
             start = next(listcycle)
-            print("start is", start)
             nextnode = next(listcycle)
-            print('nextnode is', nextnode)
+            if nextnode not in start._sinks:
+                start = next(listcycle)
             while nextnode in start._sinks:
                 if start._height > nextnode._height:
                     print(start._name, "height:", start._height)
@@ -50,18 +50,17 @@ class Graph(object):
                     print("connection capacity:", start._sinks[nextnode])
                     if start._sinks[nextnode] >= start._height:
                         print(start._height, "packets transferred from", start._name, "to", nextnode._name)
+                        print("The height of", nextnode._name, "is", nextnode._height, "and the height of", start._name, "is", start._height)
                         start._height = 0
                         nextnode._height += start._height
-                        print("--------------------------------------------")
+                        print("-------------------------------------------------------------------")
                     elif start._sinks[nextnode] < start._height:
                         start._height -= start._sinks[nextnode]
                         nextnode._height += start._sinks[nextnode]
                         print(start._sinks[nextnode], "packets transferred to", nextnode._name, "from", start._name)
                         print("The height of", nextnode._name, "is", nextnode._height, "and the height of", start._name, "is", start._height)
-                        print("--------------------------------------------")
+                        print("-------------------------------------------------------------------")
                 nextnode = next(listcycle)
-                print("Start is", start)
-                print("Nextnode is", nextnode)
 
 
 if __name__ == "__main__":
