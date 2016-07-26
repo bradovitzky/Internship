@@ -34,16 +34,15 @@ class Graph(object):
 
     def sand_pile(self):
         listcycle = cycle(self._nodelist)
-        start = next(listcycle)
-        nextnode = next(listcycle)
-        print(nextnode)
-        while nextnode != source:
+        i = 0
+        while i <= len(self._nodelist):
+            i += 1
+            start = next(listcycle)
+            nextnode = next(listcycle)
             if nextnode in start._sinks:
-                print(nextnode, "in node._sinks")
                 if start._height > nextnode._height:
-                    print(start._sinks[nextnode])
-                    print(start._height)
-                    print(nextnode._height)
+                    print(start._name, "height:", start._height)
+                    print(nextnode._name, "height:", nextnode._height)
                     print("connection capacity:", start._sinks[nextnode])
                     if start._sinks[nextnode] >= start._height:
                         print(nextnode._height, "packets transferred from", start._name, "to", nextnode._name)
@@ -56,8 +55,6 @@ class Graph(object):
                         print("The height of", nextnode._name, "is", nextnode._height, "and the height of", start._name, "is", start._height)
                     else:
                         print("lolwut")
-            nextnode = next(listcycle)
-        nextnode = start
 
 
 if __name__ == "__main__":
