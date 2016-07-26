@@ -52,12 +52,15 @@ class Graph(object):
                         print(start._height, "packets transferred from", start._name, "to", nextnode._name)
                         start._height = 0
                         nextnode._height += start._height
+                        print("--------------------------------------------")
                     elif start._sinks[nextnode] < start._height:
                         start._height -= start._sinks[nextnode]
                         nextnode._height += start._sinks[nextnode]
                         print(start._sinks[nextnode], "packets transferred to", nextnode._name, "from", start._name)
                         print("The height of", nextnode._name, "is", nextnode._height, "and the height of", start._name, "is", start._height)
+                        print("--------------------------------------------")
                 nextnode = next(listcycle)
+                print("Start is", start)
                 print("Nextnode is", nextnode)
 
 
