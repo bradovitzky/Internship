@@ -12,11 +12,25 @@ class Node(object):
         print("Connection created between", self._name, "and", node, "with capacity", capacity)
         return
 
-    def print_all_neighbors(self):
+    def print_depth_first(self): #Note: unused
         myString = "My name is {} and I have {} sinks: ".format(self._name, len(self._sinks))
-        print(myString, ', '.join(str(p) for p in self._sinks))
+        print(myString, ', '.join(p._name for p in self._sinks))
         for sink in self._sinks:
             sink.print_all_neighbors()
+        return
+
+    def traverse_breadth_first(self):
+        myString = "My name is {} and I have {} sinks: ".format(self._name, len(self._sinks))
+        print(myString, ', '.join(p._name for p in self._sinks))
+        self.print_sinks()
+        return
+
+    def print_sinks(self):
+        for sink in self._sinks:
+            myString = "I am {} and I have {} sinks: ".format(sink._name, len(sink._sinks))
+            print(myString, ', '.join(p._name for p in sink._sinks))
+        for s in self._sinks:
+            s.print_sinks()
         return
 
     def __str__(self):
@@ -28,44 +42,76 @@ class Graph(object):
     def __init__(self):
         self.numEdges = 0
         self._nodelist = []
-        self._path = []
 
     def add_node(self, node):
         self._nodelist.append(node)
         print('Node "', node, '" added to graph')
 
+    def traverse(self):
+        source = self._nodelist[1]
+        self.sand_pile()
+        return
+
     def sand_pile(self):
-        '''What this code is trying to accomplish is to go through every node in a breadth first manner, checking
-        if the nodes that come after it have a smaller pile than themselves, and transferring their height if
-        necessary. A problem that I see arising here is that the checking and passing process should go in BACKWARDS
-        order so that it doesn't make a mistake with the heights, however that assumption may be wrong. Discuss this
-        code with dad ASAP.'''
-        listcycle = cycle(self._nodelist)
-        i = 0
-        while i <= self.numEdges:
-            i += 1
-            start = next(listcycle)
-            nextnode = next(listcycle)
-            if nextnode not in start._sinks:
-                start = nextnode
-            while nextnode in start._sinks:
-                if start._height > nextnode._height:
-                    print(start._name, "height:", start._height)
-                    print(nextnode._name, "height:", nextnode._height)
-                    print("connection capacity:", start._sinks[nextnode])
-                    if start._sinks[nextnode] >= start._height:
-                        print(start._height, "packets transferred from", start._name, "to", nextnode._name)
-                        print("The height of", nextnode._name, "is", nextnode._height, "and the height of", start._name, "is", start._height)
-                        start._height = 0
-                        nextnode._height += start._height
-                        print("-------------------------------------------------------------------")
-                    elif start._sinks[nextnode] < start._height:
-                        start._height -= start._sinks[nextnode]
-                        nextnode._height += start._sinks[nextnode]
-                        print(start._sinks[nextnode], "packets transferred to", nextnode._name, "from", start._name)
-                        print("The height of", nextnode._name, "is", nextnode._height, "and the height of", start._name, "is", start._height)
-                        print("-------------------------------------------------------------------")
-                nextnode = next(listcycle)
+        for sink in source._sinks:
+            if source._height > sink._height:
+                print(source._name, "height:", source._height)
+                print(sink._name, "height:", sink._height)
+                print("connection capacity:", source._sinks[sink])
+                if source._sinks[sink] >= source._height:
+                    print(source._height, "packets transferred from", source._name, "to", sink._name)
+                    print("The height of", sink._name, "is", sink._height, "and the height of", source._name, "is", source._height)
+                    source._height = 0
+                    sink._height += source._height
+                    print("-------------------------------------------------------------------")
+                elif source._sinks[sink] < source._height:
+                    source._height -= source._sinks[sink]
+                    sink._height += source._sinks[sink]
+                    print(source._sinks[sink], "packets transferred to", sink._name, "from", source._name)
+                    print("The height of", sink._name, "is", sink._height, "and the height of", source._name, "is", source._height)
+                    print("-------------------------------------------------------------------")
+        for s in source._sinks:
+            self.sand_pile()
+        return
+
+#    def sand_pile(self):
+#        '''What this code is trying to accomplish is to go through every node in a breadth first manner, checking
+#        if the nodes that come after it have a smaller pile than themselves, and transferring their height if
+#        necessary. A problem that I see arising here is that the checking and passing process should go in BACKWARDS
+#        order so that it doesn't make a mistake with the heights, however that assumption may be wrong. Discuss this
+#        code with dad ASAP.'''
+#        listcycle = cycle(self._nodelist)
+#        i = 0
+#        while i <= self.numEdges:
+#            i += 1
+#            start = next(listcycle)
+#            print("The current Start is", start)
+#            nextnode = next(listcycle)
+#            print("The current Nextnode is", nextnode)
+#            if nextnode not in start._sinks:
+#                start = next(listcycle)
+#                print("The new nextnode is", nextnode)
+#                print("The new start is", start)
+#            while nextnode in start._sinks:
+#                print("nextnode in start._sinks")
+#                print(start._height, nextnode._height)
+#                if start._height > nextnode._height:
+#                    print(start._name, "height:", start._height)
+#                    print(nextnode._name, "height:", nextnode._height)
+#                    print("connection capacity:", start._sinks[nextnode])
+#                    if start._sinks[nextnode] >= start._height:
+#                        print(start._height, "packets transferred from", start._name, "to", nextnode._name)
+#                        print("The height of", nextnode._name, "is", nextnode._height, "and the height of", start._name, "is", start._height)
+#                        start._height = 0
+#                        nextnode._height += start._height
+#                        print("-------------------------------------------------------------------")
+#                    elif start._sinks[nextnode] < start._height:
+#                        start._height -= start._sinks[nextnode]
+#                        nextnode._height += start._sinks[nextnode]
+#                        print(start._sinks[nextnode], "packets transferred to", nextnode._name, "from", start._name)
+#                        print("The height of", nextnode._name, "is", nextnode._height, "and the height of", start._name, "is", start._height)
+#                        print("-------------------------------------------------------------------")
+#                nextnode = next(listcycle)
 
 
 if __name__ == "__main__":
@@ -82,7 +128,7 @@ if __name__ == "__main__":
     sink = Node("sink", 0)
     p.add_sink(sink, 10)
     q.add_sink(sink, 10)
-    source.print_all_neighbors()
+    source.traverse_breadth_first()
 
     g = Graph()
     g.add_node(source)
@@ -94,4 +140,4 @@ if __name__ == "__main__":
         for sinks in node._sinks:
             g.numEdges += 1
     print("There are", g.numEdges, "edges in this graphs")
-    g.sand_pile()
+    g.traverse()
