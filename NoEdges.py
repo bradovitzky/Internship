@@ -12,12 +12,14 @@ class Node(object):
         print("Connection created between", self._name, "and", node, "with capacity", capacity)
         return
 
+###########################################################
     def print_depth_first(self): #Note: unused
         myString = "My name is {} and I have {} sinks: ".format(self._name, len(self._sinks))
         print(myString, ', '.join(p._name for p in self._sinks))
         for sink in self._sinks:
             sink.print_all_neighbors()
         return
+###########################################################
 
     def traverse_breadth_first(self):
         myString = "My name is {} and I have {} sinks: ".format(self._name, len(self._sinks))
@@ -48,30 +50,35 @@ class Graph(object):
         print('Node "', node, '" added to graph')
 
     def traverse(self):
-        source = self._nodelist[1]
-        self.sand_pile()
+        source = self._nodelist[0]
+        self.sand_pile(source)
         return
 
-    def sand_pile(self):
-        for sink in source._sinks:
-            if source._height > sink._height:
-                print(source._name, "height:", source._height)
+    def sand_pile(self, start):
+        for sink in start._sinks:
+            if start._height > sink._height:
+                print(start._name, "height:", start._height)
                 print(sink._name, "height:", sink._height)
-                print("connection capacity:", source._sinks[sink])
-                if source._sinks[sink] >= source._height:
-                    print(source._height, "packets transferred from", source._name, "to", sink._name)
-                    print("The height of", sink._name, "is", sink._height, "and the height of", source._name, "is", source._height)
-                    source._height = 0
-                    sink._height += source._height
+                print("connection capacity:", start._sinks[sink])
+                if start._sinks[sink] >= start._height:
+                    print(start._height, "packets transferred from", start._name, "to", sink._name)
+                    print("The height of", sink._name, "is", sink._height, "and the height of", start._name, "is", start._height)
+                    start._height = 0
+                    sink._height += start._height
                     print("-------------------------------------------------------------------")
-                elif source._sinks[sink] < source._height:
-                    source._height -= source._sinks[sink]
-                    sink._height += source._sinks[sink]
-                    print(source._sinks[sink], "packets transferred to", sink._name, "from", source._name)
-                    print("The height of", sink._name, "is", sink._height, "and the height of", source._name, "is", source._height)
+                elif start._sinks[sink] < start._height:
+                    start._height -= start._sinks[sink]
+                    sink._height += start._sinks[sink]
+                    print(start._sinks[sink], "packets transferred to", sink._name, "from", start._name)
+                    print("The height of", sink._name, "is", sink._height, "and the height of", start._name, "is", start._height)
                     print("-------------------------------------------------------------------")
-        for s in source._sinks:
-            self.sand_pile()
+                else:
+                    print('Uh oh')
+            elif:
+
+        for s in start._sinks:
+            print(s)
+            self.sand_pile(s)
         return
 
 #    def sand_pile(self):
