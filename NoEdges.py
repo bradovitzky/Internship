@@ -1,4 +1,4 @@
-from itertools import cycle
+from random import randint
 
 class Node(object):
     def __init__(self, name, height):
@@ -56,28 +56,116 @@ class Graph(object):
 
     def sand_pile(self, start):
         for sink in start._sinks:
-            if start._height > sink._height:
-                print(start._name, "height:", start._height)
-                print(sink._name, "height:", sink._height)
-                print("connection capacity:", start._sinks[sink])
-                if start._sinks[sink] >= start._height:
-                    print(start._height, "packets transferred from", start._name, "to", sink._name)
-                    print("The height of", sink._name, "is", sink._height, "and the height of", start._name, "is", start._height)
-                    start._height = 0
-                    sink._height += start._height
+            if len(start._sinks) == 1:
+                if start._height > sink._height:
+                    print(start._name, "height:", start._height)
+                    print(sink._name, "height:", sink._height)
+                    print("connection capacity:", start._sinks[sink])
+                    if start._sinks[sink] >= start._height:
+                        sink._height += start._height
+                        start._height -= start._height
+                        print(start._height, "packets transferred from", start._name, "to", sink._name)
+                        print("The height of", sink._name, "is", sink._height, "and the height of", start._name, "is", start._height)
+                        print("-------------------------------------------------------------------")
+                        continue
+                    elif start._sinks[sink] < start._height:
+                        start._height -= start._sinks[sink]
+                        sink._height += start._sinks[sink]
+                        print(start._sinks[sink], "packets transferred to", sink._name, "from", start._name)
+                        print("The height of", sink._name, "is", sink._height, "and the height of", start._name, "is", start._height)
+                        print("-------------------------------------------------------------------")
+                        continue
+                    else:
+                        print('Uh oh')
+                elif start._height == sink._height:
+                    print(start._name, "height:", start._height)
+                    print(sink._name, "height:", sink._height)
+                    print("connection capacity:", start._sinks[sink])
+                    print("The nodes have the same height. Going on to next node.")
                     print("-------------------------------------------------------------------")
-                elif start._sinks[sink] < start._height:
-                    start._height -= start._sinks[sink]
-                    sink._height += start._sinks[sink]
-                    print(start._sinks[sink], "packets transferred to", sink._name, "from", start._name)
-                    print("The height of", sink._name, "is", sink._height, "and the height of", start._name, "is", start._height)
+                    continue
+                elif start._height < sink._height:
+                    print(start._name, "height:", start._height)
+                    print(sink._name, "height:", sink._height)
+                    print("connection capacity:", start._sinks[sink])
+                    print("The sink cannot receive more data. Going on to next node")
                     print("-------------------------------------------------------------------")
-                else:
-                    print('Uh oh')
-            elif:
+                    continue
 
+            elif len(start._sinks) > 1: #This section is executed if the selected node has multiple sinks
+                randomizer = randint(1, len(start._sinks)-1)
+                if start == source:
+                    if start._height > sink._height:
+                        print(start._name, "height:", start._height)
+                        print(sink._name, "height:", sink._height)
+                        print("connection capacity:", start._sinks[sink])
+                        if start._sinks[sink] >= start._height:
+                            sink._height += start._height
+                            start._height -= start._height
+                            print(start._height, "packets transferred from", start._name, "to", sink._name)
+                            print("The height of", sink._name, "is", sink._height, "and the height of", start._name, "is", start._height)
+                            print("-------------------------------------------------------------------")
+                            continue
+                        elif start._sinks[sink] < start._height:
+                            start._height -= start._sinks[sink]
+                            sink._height += start._sinks[sink]
+                            print(start._sinks[sink], "packets transferred to", sink._name, "from", start._name)
+                            print("The height of", sink._name, "is", sink._height, "and the height of", start._name, "is", start._height)
+                            print("-------------------------------------------------------------------")
+                            continue
+                        else:
+                            print('Uh oh')
+                    elif start._height == sink._height:
+                        print(start._name, "height:", start._height)
+                        print(sink._name, "height:", sink._height)
+                        print("connection capacity:", start._sinks[sink])
+                        print("The nodes have the same height. Going on to next node.")
+                        print("-------------------------------------------------------------------")
+                        continue
+                    elif start._height < sink._height:
+                        print(start._name, "height:", start._height)
+                        print(sink._name, "height:", sink._height)
+                        print("connection capacity:", start._sinks[sink])
+                        print("The sink cannot receive more data. Going on to next node")
+                        print("-------------------------------------------------------------------")
+                        continue
+                else:
+                    sink = list(start._sinks.keys())[randomizer]
+                    if start._height > sink._height:
+                        print(start._name, "height:", start._height)
+                        print(sink._name, "height:", sink._height)
+                        print("connection capacity:", start._sinks[sink])
+                        if start._sinks[sink] >= start._height:
+                            sink._height += start._height
+                            start._height -= start._height
+                            print(start._height, "packets transferred from", start._name, "to", sink._name)
+                            print("The height of", sink._name, "is", sink._height, "and the height of", start._name, "is", start._height)
+                            print("-------------------------------------------------------------------")
+                            continue
+                        elif start._sinks[sink] < start._height:
+                            start._height -= start._sinks[sink]
+                            sink._height += start._sinks[sink]
+                            print(start._sinks[sink], "packets transferred to", sink._name, "from", start._name)
+                            print("The height of", sink._name, "is", sink._height, "and the height of", start._name, "is", start._height)
+                            print("-------------------------------------------------------------------")
+                            continue
+                        else:
+                            print('Uh oh')
+                    elif start._height == sink._height:
+                        print(start._name, "height:", start._height)
+                        print(sink._name, "height:", sink._height)
+                        print("connection capacity:", start._sinks[sink])
+                        print("The nodes have the same height. Going on to next node.")
+                        print("-------------------------------------------------------------------")
+                        continue
+                    elif start._height < sink._height:
+                        print(start._name, "height:", start._height)
+                        print(sink._name, "height:", sink._height)
+                        print("connection capacity:", start._sinks[sink])
+                        print("The sink cannot receive more data. Going on to next node")
+                        print("-------------------------------------------------------------------")
+                        continue
         for s in start._sinks:
-            print(s)
             self.sand_pile(s)
         return
 
@@ -146,5 +234,5 @@ if __name__ == "__main__":
     for node in g._nodelist:
         for sinks in node._sinks:
             g.numEdges += 1
-    print("There are", g.numEdges, "edges in this graphs")
+    print("There are", g.numEdges, "edges in this graph")
     g.traverse()
