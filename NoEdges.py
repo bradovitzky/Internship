@@ -42,7 +42,6 @@ class Node(object):
 
 class Graph(object):
     def __init__(self):
-        self.numEdges = 0
         self._nodelist = []
 
     def add_node(self, node):
@@ -85,38 +84,45 @@ class Graph(object):
                 print(end._name, "height:", end._height)
                 print("connection capacity:", start._sinks[end])
                 print("The sink cannot receive more data. Going on to next node")
-            if end == sink:
+            if len(end._sinks) == 0:
                 end._height = 0
-                print("Sink chewed up data")
+                print("Sink height reset to", end._height)
             print("-------------------------------------------------------------------")
         for s in start._sinks:
             self.sand_pile(s)
         return
 
 if __name__ == "__main__":
-    source = Node("source", 10000)
-    s = Node("s", 0)
-    source.add_sink(s, 10)
-    o = Node("o", 0)
-    source.add_sink(o, 10)
-    p = Node("p", 0)
-    s.add_sink(p, 10)
-    q = Node("q", 0)
-    o.add_sink(q, 10)
-    o.add_sink(p, 10)
-    sink = Node("sink", 0)
-    p.add_sink(sink, 10)
-    q.add_sink(sink, 10)
-    source.traverse_breadth_first()
+    def is_number(s):
+        try:
+            int(s)
+            return True
+        except ValueError:
+            return False
 
+    f = open("Graph.txt", 'r')
     g = Graph()
-    g.add_node(source)
-    g.add_node(s)
-    g.add_node(o)
-    g.add_node(p)
-    g.add_node(q)
-    for node in g._nodelist:
-        for sinks in node._sinks:
-            g.numEdges += 1
-    print("There are", g.numEdges, "edges in this graph")
+    for line in f.readlines():
+        lineList = line.split()
+        print(lineList)
+        if "NODE" in line:
+            continue
+        newNode = Node(lineList[0], lineList[1])
+        lineList.pop(0)
+        lineList.pop(0)
+        print(lineList)
+        sinks = []
+        values = []
+        for element in lineList:
+            if is_number(element):
+                print(element, "added to 'sinks'")
+                sinks.append(element)
+            elif not is_number(element):
+                print(element, "added to 'values'")
+                values.append(element)
+        for i in range(len(sinks)):
+            print(sinks[i])
+            print(values[i])
+            newNode.add_sink(sinks[i], values[i])
+        newNode.traverse_breadth_first()
     g.traverse()
