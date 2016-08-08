@@ -106,7 +106,7 @@ if __name__ == "__main__":
         depth = lineList[1]
         g._levels[depth] = newNode
         g.add_node(newNode)
-        print("New node created with name", lineList[0], "and height", lineList[2], "on level", lineList[1])
+        print("New node created with name", lineList[0], "and height", lineList[2], "on level", lineList[1]);
         if len(lineList) == 3:
             print("This is the final node and has no sinks")
         else:
@@ -129,4 +129,11 @@ if __name__ == "__main__":
                 newNode.add_sink(sinks[i], values[i])
         #newNode.traverse_breadth_first()
     g._maxDepth = max(g._levels)
+    treeList = []
+    for lvl in g._levels:
+        print(lvl)
+        lvlList = []
+        lvlList.append(lvl)
+        treeList += lvlList
+    print(treeList)
     g.traverse()
