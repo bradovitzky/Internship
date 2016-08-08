@@ -35,6 +35,8 @@ class Node(object):
 class Graph(object):
     def __init__(self):
         self._nodelist = []
+        self._levels = {}
+        self._maxDepth = int()
 
     def add_node(self, node):
         self._nodelist.append(node)
@@ -100,12 +102,15 @@ if __name__ == "__main__":
         print(lineList)
         if "NODE" in line:
             continue
-        newNode = Node(lineList[0], lineList[1])
+        newNode = Node(lineList[0], lineList[2])
+        depth = lineList[1]
+        g._levels[depth] = newNode
         g.add_node(newNode)
-        print("New node created with name", lineList[0], "and height", lineList[1])
-        if len(lineList) == 2:
+        print("New node created with name", lineList[0], "and height", lineList[2], "on level", lineList[1])
+        if len(lineList) == 3:
             print("This is the final node and has no sinks")
         else:
+            lineList.pop(0)
             lineList.pop(0)
             lineList.pop(0)
             print(lineList)
@@ -123,4 +128,5 @@ if __name__ == "__main__":
                 print(values[i])
                 newNode.add_sink(sinks[i], values[i])
         #newNode.traverse_breadth_first()
+    g._maxDepth = max(g._levels)
     g.traverse()
