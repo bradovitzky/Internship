@@ -12,14 +12,6 @@ class Node(object):
         print("Connection created between", self._name, "and", node, "with capacity", capacity)
         return
 
-###########################################################
-    def print_depth_first(self): #Note: unused
-        myString = "My name is {} and I have {} sinks: ".format(self._name, len(self._sinks))
-        print(myString, ', '.join(p._name for p in self._sinks))
-        for sink in self._sinks:
-            sink.print_all_neighbors()
-        return
-###########################################################
 
     def traverse_breadth_first(self):
         myString = "My name is {} and I have {} sinks: ".format(self._name, len(self._sinks))
@@ -50,12 +42,13 @@ class Graph(object):
 
     def traverse(self):
         source = self._nodelist[0]
+        print(source)
         self.sand_pile(source)
         return
 
     def sand_pile(self, start):
         for end in start._sinks:
-            if len(start._sinks) == 1 or start == source:
+            if len(start._sinks) == 1 or start == self._nodelist[0]:
                 pass
             elif len(start._sinks) > 1:  # This section is executed if the selected node has multiple sinks
                 randomizer = randint(1, len(start._sinks) - 1)
@@ -108,21 +101,26 @@ if __name__ == "__main__":
         if "NODE" in line:
             continue
         newNode = Node(lineList[0], lineList[1])
-        lineList.pop(0)
-        lineList.pop(0)
-        print(lineList)
-        sinks = []
-        values = []
-        for element in lineList:
-            if is_number(element):
-                print(element, "added to 'sinks'")
-                sinks.append(element)
-            elif not is_number(element):
-                print(element, "added to 'values'")
-                values.append(element)
-        for i in range(len(sinks)):
-            print(sinks[i])
-            print(values[i])
-            newNode.add_sink(sinks[i], values[i])
-        newNode.traverse_breadth_first()
+        g.add_node(newNode)
+        print("New node created with name", lineList[0], "and height", lineList[1])
+        if len(lineList) == 2:
+            print("This is the final node and has no sinks")
+        else:
+            lineList.pop(0)
+            lineList.pop(0)
+            print(lineList)
+            sinks = []
+            values = []
+            for element in lineList:
+                if not is_number(element):
+                    print(element, "added to 'sinks'")
+                    sinks.append(element)
+                elif is_number(element):
+                    print(element, "added to 'values'")
+                    values.append(element)
+            for i in range(len(sinks)):
+                print(sinks[i])
+                print(values[i])
+                newNode.add_sink(sinks[i], values[i])
+        #newNode.traverse_breadth_first()
     g.traverse()
