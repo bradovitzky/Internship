@@ -12,12 +12,15 @@ def is_number(s):
 class Node(object):
     def __init__(self, name, height):
         self._name = name
-        self._height = height
+        self._height = int(height)
         self._sinks = {}
         return
 
+    def getName(self):
+        return self._name
+
     def add_sink(self, node, capacity):
-        self._sinks[node] = capacity
+        self._sinks[node] = int(capacity)
         print("Connection created between", self._name, "and", node, "with capacity", capacity)
         return
 
@@ -43,55 +46,74 @@ class Node(object):
 
 class Graph(object):
     def __init__(self):
-        self._nodelist = []
+        self._nodes = {}
         self._levels = {}
         self._maxDepth = int()
         self._treeList = []
+        return
 
     def add_node(self, node):
-        self._nodelist.append(node)
+        name = node.getName()
+        self._nodes[name] = node
         print('Node "', node, '" added to graph with height', node._height)
+        return
+
+    def getNodeByName(self, name):
+        return self._nodes[name]
 
     def traverse(self):
-        source = self._nodelist[0]
+        source = self._nodes[0]
         print(source._name, source._height)
         self.sand_pile(source)
         return
 
-    def breadthFirstTraverse(self):
-        f = open("Graph.txt", 'r')
-        for line in f.readlines():
+    def readFromFile(self, fileName):
+        f = open(fileName, 'r')
+        lines = f.readlines()[1:] # skip first comment line
+        # first pass to create all the nodes without edges
+        for line in lines:
             lineList = line.split()
             print(lineList)
-            if "NODE" in line:
+            if line[0] == '#': # skip comment lines
                 continue
             newNode = Node(lineList[0], lineList[2])
             depth = lineList[1]
             self._levels[depth] = newNode
             self.add_node(newNode)
             print("New node created with name", lineList[0], "and height", lineList[2], "on level", lineList[1]);
+
+        # second pass to create edges
+        n = 0
+        for line in lines:
+            lineList = line.split()
+            # pull all the nodes of the graph already created
+            myName = lineList[0]
+            myNode = self.getNodeByName(myName)
+            # retrieve list of sink names from file
+            sinkNames = []
+            sinkCapacities = []
             if len(lineList) == 3:
                 print("This is the final node and has no sinks")
-            else:
-                lineList.pop(0)
-                lineList.pop(0)
-                lineList.pop(0)
-                print(lineList)
-                sinks = []
-                values = []
-                for element in lineList:
-                    if not is_number(element):
-                        print(element, "added to 'sinks'")
-                        sinks.append(element)
-                    elif is_number(element):
-                        print(element, "added to 'values'")
-                        values.append(element)
-                for i in range(len(sinks)):
-                    print(sinks[i])
-                    print(values[i])
-                    sink = Node(sinks[i], int())  # Here is the issue, the sink is being created but then not used.
-                    newNode.add_sink(sink, values[i])
-                    # newNode.traverse_breadth_first()
+            for element in lineList[3:]:
+                if not is_number(element):
+                    print(element, "added to 'sinks'")
+                    sinkNames.append(element)
+                else:
+                    print(element, "added to 'capacities'")
+                    sinkCapacities.append(element)
+
+
+            # link sinks to myNode
+            i=0
+            for sinkName in sinkNames:
+                sink = self.getNodeByName(sinkName)
+                myNode.add_sink(sink, sinkCapacities[i])
+                i += 1
+
+            n += 1
+        return
+
+    def breadthFirstTraverse(self):
         self._maxDepth = max(self._levels)
         for lvl in sorted(self._levels.keys()):
             lvlList = []
@@ -99,13 +121,14 @@ class Graph(object):
             self._treeList += lvlList
             for node in lvlList:
                 self.sand_pile(node)
+        return
 
     def sand_pile(self, start):
         for end in start._sinks:
             if len(start._sinks) > 1:  # This section is executed if the selected node has multiple sinks
                 randomizer = randint(1, len(start._sinks) - 1)
                 end = list(start._sinks.keys())[randomizer]
-            if start._height > start._height:
+            if start._height > end._height: # try to send some data
                 print(start._name, "height:", start._height)
                 print(end._name, "height:", end._height)
                 print("connection capacity:", start._sinks[end])
@@ -138,4 +161,5 @@ class Graph(object):
 if __name__ == "__main__":
 
     g = Graph()
+    g.readFromFile("Graph.txt")
     g.breadthFirstTraverse()
