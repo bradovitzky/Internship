@@ -40,11 +40,11 @@ class Graph(object):
 
     def add_node(self, node):
         self._nodelist.append(node)
-        print('Node "', node, '" added to graph')
+        print('Node "', node, '" added to graph with height', node._height)
 
     def traverse(self):
         source = self._nodelist[0]
-        print(source)
+        print(source._name, source._height)
         self.sand_pile(source)
         return
 
@@ -130,10 +130,8 @@ if __name__ == "__main__":
         #newNode.traverse_breadth_first()
     g._maxDepth = max(g._levels)
     treeList = []
-    for lvl in g._levels:
-        print(lvl)
+    for lvl in sorted(g._levels.keys()):
         lvlList = []
-        lvlList.append(lvl)
+        lvlList.append(g._levels.get(lvl))
         treeList += lvlList
-    print(treeList)
     g.traverse()
