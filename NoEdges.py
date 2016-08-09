@@ -89,7 +89,7 @@ class Graph(object):
                 for i in range(len(sinks)):
                     print(sinks[i])
                     print(values[i])
-                    sink = Node(sinks[i], int())
+                    sink = Node(sinks[i], int())  # Here is the issue, the sink is being created but then not used.
                     newNode.add_sink(sink, values[i])
                     # newNode.traverse_breadth_first()
         self._maxDepth = max(self._levels)
