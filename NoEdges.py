@@ -1,5 +1,14 @@
 from random import randint
 
+
+def is_number(s):
+    try:
+        int(s)
+        return True
+    except ValueError:
+        return False
+
+
 class Node(object):
     def __init__(self, name, height):
         self._name = name
@@ -37,6 +46,7 @@ class Graph(object):
         self._nodelist = []
         self._levels = {}
         self._maxDepth = int()
+        self._treeList = []
 
     def add_node(self, node):
         self._nodelist.append(node)
@@ -48,14 +58,54 @@ class Graph(object):
         self.sand_pile(source)
         return
 
+    def breadthFirstTraverse(self):
+        f = open("Graph.txt", 'r')
+        for line in f.readlines():
+            lineList = line.split()
+            print(lineList)
+            if "NODE" in line:
+                continue
+            newNode = Node(lineList[0], lineList[2])
+            depth = lineList[1]
+            self._levels[depth] = newNode
+            self.add_node(newNode)
+            print("New node created with name", lineList[0], "and height", lineList[2], "on level", lineList[1]);
+            if len(lineList) == 3:
+                print("This is the final node and has no sinks")
+            else:
+                lineList.pop(0)
+                lineList.pop(0)
+                lineList.pop(0)
+                print(lineList)
+                sinks = []
+                values = []
+                for element in lineList:
+                    if not is_number(element):
+                        print(element, "added to 'sinks'")
+                        sinks.append(element)
+                    elif is_number(element):
+                        print(element, "added to 'values'")
+                        values.append(element)
+                for i in range(len(sinks)):
+                    print(sinks[i])
+                    print(values[i])
+                    sink = Node(sinks[i], int())
+                    newNode.add_sink(sink, values[i])
+                    # newNode.traverse_breadth_first()
+        self._maxDepth = max(self._levels)
+        for lvl in sorted(self._levels.keys()):
+            lvlList = []
+            lvlList.append(self._levels.get(lvl))
+            self._treeList += lvlList
+            for node in lvlList:
+                self.sand_pile(node)
+
     def sand_pile(self, start):
         for end in start._sinks:
-            if len(start._sinks) == 1 or start == self._nodelist[0]:
-                pass
-            elif len(start._sinks) > 1:  # This section is executed if the selected node has multiple sinks
+            if len(start._sinks) > 1:  # This section is executed if the selected node has multiple sinks
                 randomizer = randint(1, len(start._sinks) - 1)
                 end = list(start._sinks.keys())[randomizer]
-            if start._height > end._height:
+            if start._height > start._height:
                 print(start._name, "height:", start._height)
                 print(end._name, "height:", end._height)
                 print("connection capacity:", start._sinks[end])
@@ -83,55 +133,9 @@ class Graph(object):
                 end._height = 0
                 print("Sink height reset to", end._height)
             print("-------------------------------------------------------------------")
-        for s in start._sinks:
-            self.sand_pile(s)
         return
 
 if __name__ == "__main__":
-    def is_number(s):
-        try:
-            int(s)
-            return True
-        except ValueError:
-            return False
 
-    f = open("Graph.txt", 'r')
     g = Graph()
-    for line in f.readlines():
-        lineList = line.split()
-        print(lineList)
-        if "NODE" in line:
-            continue
-        newNode = Node(lineList[0], lineList[2])
-        depth = lineList[1]
-        g._levels[depth] = newNode
-        g.add_node(newNode)
-        print("New node created with name", lineList[0], "and height", lineList[2], "on level", lineList[1]);
-        if len(lineList) == 3:
-            print("This is the final node and has no sinks")
-        else:
-            lineList.pop(0)
-            lineList.pop(0)
-            lineList.pop(0)
-            print(lineList)
-            sinks = []
-            values = []
-            for element in lineList:
-                if not is_number(element):
-                    print(element, "added to 'sinks'")
-                    sinks.append(element)
-                elif is_number(element):
-                    print(element, "added to 'values'")
-                    values.append(element)
-            for i in range(len(sinks)):
-                print(sinks[i])
-                print(values[i])
-                newNode.add_sink(sinks[i], values[i])
-        #newNode.traverse_breadth_first()
-    g._maxDepth = max(g._levels)
-    treeList = []
-    for lvl in sorted(g._levels.keys()):
-        lvlList = []
-        lvlList.append(g._levels.get(lvl))
-        treeList += lvlList
-    g.traverse()
+    g.breadthFirstTraverse()
