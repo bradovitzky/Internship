@@ -78,7 +78,10 @@ class Graph(object):
                 continue
             newNode = Node(lineList[0], lineList[2])
             depth = lineList[1] # currently useless
-            self._levels[depth] = newNode # will eventually remove levels and depth
+            if depth not in self._levels:
+                self._levels[depth] = [newNode]
+            else:
+                self._levels[depth].append(newNode) # will eventually remove levels and depth
             self.add_node(newNode)
             print("New node created with name", lineList[0], "and height", lineList[2], "on level", lineList[1])
 
@@ -121,8 +124,9 @@ class Graph(object):
             lvlList = []
             lvlList.append(self._levels.get(lvl))
             self._treeList += lvlList
-            for node in lvlList:
-                self.sand_pile(node)
+            for list in lvlList:
+                for node in list:
+                    self.sand_pile(node)
         return
 
     def sand_pile(self, start):
