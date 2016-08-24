@@ -128,7 +128,7 @@ class Graph(object):
                 for node in list:
                     self.sand_pile(node)
         return
-
+ 
     def sand_pile(self, start):
         for end in start._sinks:
             if len(start._sinks) > 1:  # This section is executed if the selected node has multiple sinks
