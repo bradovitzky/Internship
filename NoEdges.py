@@ -128,11 +128,11 @@ class Graph(object):
                 for node in list:
                     self.sand_pile(node)
         return
- 
+
     def sand_pile(self, start):
         for end in start._sinks:
             if len(start._sinks) > 1:  # This section is executed if the selected node has multiple sinks
-                randomizer = randint(1, len(start._sinks) - 1)
+                randomizer = randint(0, len(start._sinks) - 1)
                 end = list(start._sinks.keys())[randomizer]
             if start._height > end._height: # try to send some data
                 print(start._name, "height:", start._height)
