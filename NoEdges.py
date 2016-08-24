@@ -69,7 +69,7 @@ class Graph(object):
 
     def readFromFile(self, fileName):
         f = open(fileName, 'r')
-        lines = f.readlines()[1:] # skip first comment line
+        lines = f.readlines()
         # first pass to create all the nodes without edges
         for line in lines:
             lineList = line.split()
@@ -77,10 +77,10 @@ class Graph(object):
             if line[0] == '#': # skip comment lines
                 continue
             newNode = Node(lineList[0], lineList[2])
-            depth = lineList[1]
-            self._levels[depth] = newNode
+            depth = lineList[1] # currently useless
+            self._levels[depth] = newNode # will eventually remove levels and depth
             self.add_node(newNode)
-            print("New node created with name", lineList[0], "and height", lineList[2], "on level", lineList[1]);
+            print("New node created with name", lineList[0], "and height", lineList[2], "on level", lineList[1])
 
         # second pass to create edges
         n = 0
@@ -88,13 +88,15 @@ class Graph(object):
             lineList = line.split()
             # pull all the nodes of the graph already created
             myName = lineList[0]
+            if myName == '#': # skip comment lines
+                continue
             myNode = self.getNodeByName(myName)
             # retrieve list of sink names from file
             sinkNames = []
             sinkCapacities = []
             if len(lineList) == 3:
                 print("This is the final node and has no sinks")
-            for element in lineList[3:]:
+            for element in lineList[3:]: # change to [2:] after levels and depth get removed
                 if not is_number(element):
                     print(element, "added to 'sinks'")
                     sinkNames.append(element)
