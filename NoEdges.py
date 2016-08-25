@@ -168,4 +168,5 @@ if __name__ == "__main__":
 
     g = Graph()
     g.readFromFile("Graph.txt")
-    g.breadthFirstTraverse()
+    while g._nodes['source']._height > 0:
+        g.breadthFirstTraverse()

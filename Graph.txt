@@ -1,5 +1,5 @@
 # NODE    LEVEL   HEIGHT      SINKS    CAPACITY
-source  0       10000       s o      10 10
+source  0       100       s o      10 10
 s       1       0           p        10
 o       1       0           q p      10 10
 p       2       0           sink     10
